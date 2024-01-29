@@ -1,6 +1,7 @@
 // See case 0x80 for verbose description of flag logic
 // see case 0x81 for shorthand
 // Note to self: study 0x86 further
+// AC flag is not implemented because it is unused by Space Invaders
 
 typedef struct ConditionCodes {
 	uint8_t	z:1;
@@ -263,7 +264,7 @@ int Emulate8080Op(State8080 *state) {
 			}
 		case 0x87:	// ADD A
 			{
-				uint16_t answer = (uint16_t) state->a + state->a;
+				uint16_t answer = (uint16_t) state->a + (uint16_t) state->a;
 				state->cc.z = ((answer & 0xff) == 0);
 				state->cc.s = ((answer & 0x80) != 0);
 				state->cc.cy = (answer > 0xff);
@@ -279,14 +280,86 @@ int Emulate8080Op(State8080 *state) {
 		case 0x8d: UnimplementedInstruction(state); break;
 		case 0x8e: UnimplementedInstruction(state); break;
 		case 0x8f: UnimplementedInstruction(state); break;
-		case 0x90: UnimplementedInstruction(state); break;
-		case 0x91: UnimplementedInstruction(state); break;
-		case 0x92: UnimplementedInstruction(state); break;
-		case 0x93: UnimplementedInstruction(state); break;
-		case 0x94: UnimplementedInstruction(state); break;
-		case 0x95: UnimplementedInstruction(state); break;
-		case 0x96: UnimplementedInstruction(state); break;
-		case 0x97: UnimplementedInstruction(state); break;
+		case 0x90:	// SUB B
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->b;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x91:	// SUB C
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->c;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x92:	// SUB D
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->d;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x93:	// SUB E
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->e;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x94:	// SUB H
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->h;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x95:	// SUB L
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->l;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x96:	// SUB M
+			{
+				uint16_t answer = (uint16_t) state->a - ((state->h<<8) | (state->l));
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
+		case 0x97:	// SUB A
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) state->a;
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
 		case 0x98: UnimplementedInstruction(state); break;
 		case 0x99: UnimplementedInstruction(state); break;
 		case 0x9a: UnimplementedInstruction(state); break;
