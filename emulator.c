@@ -480,7 +480,16 @@ int Emulate8080Op(State8080 *state) {
 		case 0xd3: UnimplementedInstruction(state); break;
 		case 0xd4: UnimplementedInstruction(state); break;
 		case 0xd5: UnimplementedInstruction(state); break;
-		case 0xd6: UnimplementedInstruction(state); break;
+		case 0xd6:	// SUI address
+			{
+				uint16_t answer = (uint16_t) state->a - (uint16_t) opcode[1];
+				state->cc.z = ((answer & 0xff) == 0);
+				state->cc.s = ((answer & 0x80) != 0);
+				state->cc.cy = (answer > 0xff);
+				state->cc.p = Parity(answer & 0xff);
+				state->a = answer & 0xff;
+				break;
+			}
 		case 0xd7: UnimplementedInstruction(state); break;
 		case 0xd8: UnimplementedInstruction(state); break;
 		case 0xd9: UnimplementedInstruction(state); break;
