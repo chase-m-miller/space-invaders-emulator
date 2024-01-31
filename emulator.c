@@ -3,6 +3,10 @@
 // Note to self: study 0x86 further
 // AC flag is not implemented because it is unused by Space Invaders
 
+#include<stdio.h>
+#include<stdint.h>
+#include<stdlib.h>
+
 typedef struct ConditionCodes {
 	uint8_t	z:1;
 	uint8_t	s:1;
